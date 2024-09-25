@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+       layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Listagem de Livros</title>
+</head>
+<body>
+<div class="container" layout:fragment="conteudo">
+    <h1>Lista de Livros</h1>
+    <div th:if="!${#strings.isEmpty(msg)}" class="alert alert-success">
+        <span th:text="${msg}"></span>
+    </div>
+    <table class="table table-striped">
+        <tr>
+            <th>Título</th>
+            <th>Sinopse</th>
+            <th>Data de Publicação</th>
+            <th>Disponível</th>
+            <th>Número de páginas</th>
+            <th>Preço</th>
+            <th></th>
+        </tr>
+        <tr th:each="churros:${books}">
+            <td th:text="${churros.titulo}"></td>
+            <td th:text="${churros.sinopse}"></td>
+            <td th:text="${#temporals.format(churros.dataPublicacao, 'dd/MM/yyyy')}"></td>
+            <td th:text="${churros.disponivel?'Sim':'Não'}"></td>
+            <td th:text="${churros.paginas}"></td>
+            <td th:text="${#numbers.formatDecimal(churros.preco, 1, 2)}"></td>
+            <td>
+                <a th:href="@{/livro/editar/}+${churros.id}">Editar</a>
+
+                <form th:action="@{/livro/delete}" method="post" onsubmit="return confirm('Você tem certeza que deseja excluir este item?');">
+                    <input type="hidden" name="id" th:value="${churros.id}"/>
+                    <input type="hidden" name="_method" value="delete"/> <!-- Para simular DELETE se necessário -->
+                    <button type="submit" class="btn btn-danger">Remover</button>
+                </form>
+                     </td>
+
+
+        </tr>
+    </table>
+
+
+<!-- <a class="btn btn-primary" th:href="@{/livro/cadastrar}">Deletar livro</a>-->
+<!--  <a class ="btn btn-primary" th:href="@{/livro/remover/{id}">Deletar livro</a>-->
+</div>
+</body>
+</html>
